@@ -1,0 +1,211 @@
+name: test
+
+on: [push]
+
+env:
+  EMAIL: none@example.local
+  PACKAGE: test-pkg
+  PASSWORD: Z2l0aHViLWFjdGlvbnM=
+  PROTOCOL: http
+  REGISTRY: //localhost:4873/
+  SCOPE: github-actions
+  USERNAME: github-actions
+
+jobs:
+  always-auth:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - name: Assert registry:always-auth is undefined
+        run: |
+          test \
+            "$(npm config get '${{ env.REGISTRY }}:always-auth')" \
+            = "undefined"
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: ${{ env.PROTOCOL }}
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert registry:always-auth is set
+        run: |
+          test \
+            "$(npm config get '${{ env.REGISTRY }}:always-auth')" \
+            = "true"
+
+  scope:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - name: Assert @<scope>:registry is unset
+        run: |
+          test \
+            "$(npm config get '@${{ env.SCOPE }}:registry')" \
+            = "undefined"
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: ${{ env.PROTOCOL }}
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert @<scope>:registry is set
+        run: |
+          test \
+            "$(npm config get '@${{ env.SCOPE }}:registry')" \
+            = "${{ env.PROTOCOL }}:${{ env.REGISTRY }}"
+
+  protocol:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert protocol defaults to https
+        run: |
+          test \
+            "$(npm config get '@${{ env.SCOPE }}:registry')" \
+            = "https:${{ env.REGISTRY }}"
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: http
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert protocol is set to http
+        run: |
+          test \
+            "$(npm config get '@${{ env.SCOPE }}:registry')" \
+            = "http:${{ env.REGISTRY }}"
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: https
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert protocol is set to https
+        run: |
+          test \
+            "$(npm config get '@${{ env.SCOPE }}:registry')" \
+            = "https:${{ env.REGISTRY }}"
+
+  email:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - name: Assert email is unset
+        run: |
+          test \
+            "$(npm config get '${{ env.REGISTRY }}:email')" \
+            = "undefined"
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: ${{ env.PROTOCOL }}
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert email is set
+        run: |
+          test \
+            "$(npm config get '${{ env.REGISTRY }}:email')" \
+            = "${{ env.EMAIL }}"
+
+  username:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - name: Assert username is unset
+        run: |
+          test \
+            "$(npm config get '${{ env.REGISTRY }}:username')" \
+            = "undefined"
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: ${{ env.PROTOCOL }}
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert username is set
+        run: |
+          test \
+            "$(npm config get '${{ env.REGISTRY }}:username')" \
+            = "${{ env.USERNAME }}"
+
+  password:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - name: Assert password is unset
+        # the .npmrc file doesn't exist at this point yet
+        run: test ! -f "$(npm userconfig)"
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: ${{ env.PROTOCOL }}
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME}}
+
+      - name: Assert _password is set
+        run: test "$(cat ~/.npmrc | grep '//localhost:4873/:_password')"

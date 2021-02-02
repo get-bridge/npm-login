@@ -1,0 +1,15 @@
+version: '3.8'
+services:
+  npm-registry:
+    healthcheck:
+      test: nc -z localhost 4873
+      interval: 5s
+      timeout: 1s
+      retries: 3
+      start_period: 10s
+    image: verdaccio/verdaccio:4
+    volumes:
+      - ./.github/workflows/conf:/verdaccio/conf
+      - ./.github/workflows/storage:/verdaccio/storage
+    ports:
+      - '4873:4873'

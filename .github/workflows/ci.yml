@@ -1,0 +1,95 @@
+name: ci
+
+on: [push]
+
+env:
+  EMAIL: none@example.local
+  PACKAGE: test-pkg
+  PASSWORD: Z2l0aHViLWFjdGlvbnM=
+  PROTOCOL: http
+  REGISTRY: //localhost:4873/
+  SCOPE: github-actions
+  USERNAME: github-actions
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - name: Start local npm registry
+        run: docker-compose up -d
+
+      - name: Wait for registry
+        run: docker run --rm --network npm-login_default willwill/wait-for-it npm-registry:4873
+
+      - name: Test – npm ping private registry
+        run: npm ping --registry ${{ env.PROTOCOL }}:${{ env.REGISTRY }}
+
+      - name: Test – assert install fails with no credentials for private registry
+        run: |
+          # `npm install` must fail to proceed
+          npm install \
+            --registry ${{ env.PROTOCOL}}:${{ env.REGISTRY }} \
+            @${{ env.SCOPE }}/${{ env.PACKAGE }} \
+            && exit 1 \
+            || exit 0
+
+      - uses: ./
+        with:
+          email: ${{ env.EMAIL }}
+          password: ${{ env.PASSWORD }}
+          protocol: ${{ env.PROTOCOL }}
+          registry: ${{ env.REGISTRY }}
+          scope: ${{ env.SCOPE }}
+          username: ${{ env.USERNAME }}
+
+      - name: Test – install succeeds from private registry
+        run: npm install @${{ env.SCOPE }}/${{ env.PACKAGE }}
+
+  env-default:
+    name: "inputs via env"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14.15.4'
+
+      - name: Start local npm registry
+        run: docker-compose up -d
+
+      - name: Wait for registry
+        run: docker run --rm --network npm-login_default willwill/wait-for-it npm-registry:4873
+
+      - name: Test – npm ping private registry
+        run: npm ping --registry ${{ env.PROTOCOL }}:${{ env.REGISTRY }}
+
+      - name: Test – assert install fails with no credentials for private registry
+        run: |
+          # `npm install` must fail to proceed
+          npm install \
+            --registry ${{ env.PROTOCOL }}:${{ env.REGISTRY }} \
+            @${{ env.SCOPE }}/${{ env.PACKAGE }} \
+            && exit 1 \
+            || exit 0
+
+      - uses: ./
+        env:
+          NPM_LOGIN_EMAIL: ${{ env.EMAIL }}
+          NPM_LOGIN_PASSWORD: ${{ env.PASSWORD }}
+          NPM_LOGIN_REGISTRY: ${{ env.REGISTRY }}
+          NPM_LOGIN_SCOPE: ${{ env.SCOPE }}
+          NPM_LOGIN_USERNAME: ${{ env.USERNAME }}
+        with:
+          # protocol has a default of https so it can't be
+          # used with environment variables
+          protocol: ${{ env.PROTOCOL }}
+
+      - name: Test – install succeeds from private registry
+        run: npm install @${{ env.SCOPE }}/${{ env.PACKAGE }}

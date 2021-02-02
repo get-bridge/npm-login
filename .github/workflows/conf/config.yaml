@@ -1,0 +1,22 @@
+storage: /verdaccio/storage
+
+auth:
+  htpasswd:
+    file: /verdaccio/conf/htpasswd
+    # disable registration
+    max_users: -1
+
+web:
+  enable: false
+
+packages:
+  '@github-actions/*':
+    access: $authenticated
+    publish: $authenticated
+
+  '**':
+    access: $authenticated
+    publish: $authenticated
+
+logs:
+  - {type: stdout, format: pretty, level: trace}

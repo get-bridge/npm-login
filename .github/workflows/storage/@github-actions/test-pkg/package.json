@@ -1,0 +1,49 @@
+{
+	"name": "@github-actions/test-pkg",
+	"versions": {
+		"1.0.0": {
+			"name": "@github-actions/test-pkg",
+			"version": "1.0.0",
+			"main": "index.js",
+			"scripts": {
+				"test": "echo \"Error: no test specified\" && exit 1"
+			},
+			"keywords": [],
+			"author": "",
+			"license": "ISC",
+			"description": "",
+			"publishConfig": {
+				"registry": "http://localhost:4873"
+			},
+			"_id": "@github-actions/test-pkg@1.0.0",
+			"_nodeVersion": "14.15.4",
+			"_npmVersion": "6.14.11",
+			"dist": {
+				"integrity": "sha512-Nk1abvPjsN70V8T/DjsHhB2uOP8Ny/GbsJ4fx3/t7DlUkKpA+Y+Z2N58aM/mtHZMn3K6QcxctDSMyK43Xvew7g==",
+				"shasum": "1d245fd8ceffdc1677fca2a3ccf27e4569aa2269",
+				"tarball": "http://localhost:4873/@github-actions/test-pkg/-/@github-actions/test-pkg-1.0.0.tgz"
+			},
+			"contributors": []
+		}
+	},
+	"time": {
+		"modified": "2021-01-31T21:29:25.158Z",
+		"created": "2021-01-31T21:29:25.158Z",
+		"1.0.0": "2021-01-31T21:29:25.158Z"
+	},
+	"users": {},
+	"dist-tags": {
+		"latest": "1.0.0"
+	},
+	"_uplinks": {},
+	"_distfiles": {},
+	"_attachments": {
+		"test-pkg-1.0.0.tgz": {
+			"shasum": "1d245fd8ceffdc1677fca2a3ccf27e4569aa2269",
+			"version": "1.0.0"
+		}
+	},
+	"_rev": "3-8d82985288774f93",
+	"_id": "@github-actions/test-pkg",
+	"readme": "ERROR: No README data found!"
+}
