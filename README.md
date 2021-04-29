@@ -1,7 +1,7 @@
 # npm-login
 
-![ci](https://github.com/instructure-bridge/npm-login/workflows/ci/badge.svg)
-![tag](https://img.shields.io/github/v/tag/instructure-bridge/npm-login?sort=semver)
+![ci](https://github.com/get-bridge/npm-login/workflows/ci/badge.svg)
+![tag](https://img.shields.io/github/v/tag/get-bridge/npm-login?sort=semver)
 
 The `npm-login` action will setup the local npm configuration to be
 able to connect to a specific scope.
@@ -10,7 +10,7 @@ able to connect to a specific scope.
 
 Typical usage of this action looks like this:
 
-    - uses: instructure-bridge/npm-login@v1
+    - uses: get-bridge/npm-login@v1
       with:
         email: ${{ secrets.NPM_EMAIL }}
         password: ${{ secrets.NPM_PASSWORD }}
