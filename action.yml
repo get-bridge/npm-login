@@ -20,6 +20,11 @@ inputs:
 runs:
   using: composite
   steps:
+    - shell: bash
+      run: |
+        echo "::notice::NOTE: This action is deprecated and is no longer maintained."
+        echo "::notice::Please, migrate to https://github.com/actions/setup-node"
+
     - env:
         INPUT_EMAIL: ${{ inputs.email }}
         INPUT_PASSWORD: ${{ inputs.password }}

@@ -3,6 +3,22 @@
 ![ci](https://github.com/get-bridge/npm-login/workflows/ci/badge.svg)
 ![tag](https://img.shields.io/github/v/tag/get-bridge/npm-login?sort=semver)
 
+**Please note: This action is deprecated and should no longer be used. Please, migrate your workflows to the [actions/setup-node](https://github.com/actions/setup-node) action. To authenticate with `actions/setup-node` use the following general approach which has been adapted from the official [documentation](https://github.com/actions/setup-node/blob/270253e841af726300e85d718a5f606959b2903c/docs/advanced-usage.md#use-private-packages):**
+
+    - uses: actions/checkout@v2
+
+    - uses: actions/setup-node@v2
+      with:
+        registry-url: http://npm.pkg.github.com
+
+    # Skip post-install scripts here, as a malicious script could steal NODE_AUTH_TOKEN.
+    - run: npm install --ignore-scripts
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.YOUR_SEKRET_TOKEN_HERE }}
+
+    # `npm rebuild` will run all those post-install scripts for us.
+    - run: npm rebuild && npm run prepare --if-present
+
 The `npm-login` action will setup the local npm configuration to be
 able to connect to a specific scope.
 
