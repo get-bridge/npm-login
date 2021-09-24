@@ -1,5 +1,7 @@
 # npm-login
 
+**Please note: This action is deprecated and should no longer be used. Please, migrate your workflows to the [actions/setup-node](https://github.com/actions/setup-node) action.**
+
 ![ci](https://github.com/get-bridge/npm-login/workflows/ci/badge.svg)
 ![tag](https://img.shields.io/github/v/tag/get-bridge/npm-login?sort=semver)
 
