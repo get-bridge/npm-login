@@ -22,8 +22,8 @@ runs:
   steps:
     - shell: bash
       run: |
-        echo "::info::NOTE: This action is deprecated and is no longer maintained."
-        echo "::info::Please, migrate to https://github.com/actions/setup-node"
+        echo "::notice::NOTE: This action is deprecated and is no longer maintained."
+        echo "::notice::Please, migrate to https://github.com/actions/setup-node"
 
     - env:
         INPUT_EMAIL: ${{ inputs.email }}
