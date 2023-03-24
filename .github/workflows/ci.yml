@@ -15,7 +15,7 @@ jobs:
   main:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v3.5.0
 
       - uses: actions/setup-node@v3.6.0
         with:
@@ -55,7 +55,7 @@ jobs:
     name: "inputs via env"
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3.4.0
+      - uses: actions/checkout@v3.5.0
 
       - uses: actions/setup-node@v3.6.0
         with:
